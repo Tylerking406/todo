@@ -1,7 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import { AiOutlinePlus } from 'react-icons/ai';
 import Todo from './Todo';
+import {db} from './firebase'
+import {query,collection,onSnapshot} from 'firebase/firestore'
+
 
 const style = {
   bg: `h-screen w-screen p-4 bg-gradient-to-r from-[#2F80ED] to-[#1CB5E0]`,
@@ -16,6 +19,21 @@ const style = {
 function App() {
 
   const [todos, setTodos] = useState(['learn react', 'grind EEE']);
+
+  //create todo
+  //read todo from firebase
+useEffect(()=>{
+const q = query(collection(db,'todos'))
+const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  let todoArr = []
+  querySnapshot.forEach((doc) =>{
+    todoArr.push({...doc.data(),id:doc.id})
+  });
+})
+},[])
+
+  // update todo in firebase
+  //delete todo
 
   return (
    
